@@ -10,7 +10,6 @@ db.insert_data("add",1,2,3)
 db.insert_data("add",1,5,6)
 db.insert_data("add",1,0,1)
 db.insert_data("add",1,2,3)
-db.select_data()
 # Create your views here.
 def index(request):
     return HttpResponse("Welcome to Brian's calculator")

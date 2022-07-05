@@ -9,8 +9,8 @@ class connection():
         self.user = "brian"
         self.password = "Clone112424!"
         self.sslmode = "require"
-        conn_string = "host={0} user={1} dbname={2} password={3} sslmode={4}".format(self.host, self.user, self.dbname, self.password, self.sslmode)
-        self.conn = psycopg2.connect(conn_string) 
+        self.conn_string = "host={0} user={1} dbname={2} password={3} sslmode={4}".format(self.host, self.user, self.dbname, self.password, self.sslmode)
+        self.conn = psycopg2.connect(self.conn_string) 
         print("Connection established")
         self.cursor = self.conn.cursor()
         # Drop previous table of same name if one exists
@@ -29,7 +29,8 @@ class connection():
         return rows
        
     # Clean up
-    def cleanUp(self):
+    def __del__(self):
+        print("cleaning up")
         self.conn.commit()
         self.cursor.close()
         self.conn.close()
