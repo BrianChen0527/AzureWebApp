@@ -17,14 +17,29 @@ class connection():
         print("Finished dropping table (if existed)")
         self.cursor.execute("CREATE TABLE inventory (id serial PRIMARY KEY, request_str VARCHAR(50), num1 INTEGER, num2 INTEGER, res INTEGER);")
         print("Finished creating table")
+        self.conn.commit()
+        self.cursor.close()
+        self.conn.close()
 
     def insert_data(self, request_str, num1, num2, res):
+        self.conn = psycopg2.connect(self.conn_string) 
+        print("Connection established")
+        self.cursor = self.conn.cursor()
         self.cursor.execute("INSERT INTO inventory (request_str, num1, num2, res) VALUES (\'%s\', %d, %d, %d);" % (str(request_str), int(num1), int(num2), int(res)))
         print("Inserted 1 row of data")
+        self.conn.commit()
+        self.cursor.close()
+        self.conn.close()
 
     def select_data(self):
+        self.conn = psycopg2.connect(self.conn_string) 
+        print("Connection established")
+        self.cursor = self.conn.cursor()
         self.cursor.execute("select * from inventory order by id desc limit 5;")
         rows = self.cursor.fetchall()
+        self.conn.commit()
+        self.cursor.close()
+        self.conn.close()
         return rows
        
     # Clean up
