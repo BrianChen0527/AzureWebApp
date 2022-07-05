@@ -1,0 +1,25 @@
+
+{% extends 'basic.html' %}
+
+{% block content %}
+<script>
+    function calcSum(){
+    let box1 = document.getElementById("n1").value;
+    let box2 = document.getElementById("n2").value;
+    let sum = Number(box1) + Number(box2);
+    document.getElementById("+").value = sum;
+    }
+</script>
+
+<h1>calculate</h1>
+<form action="add" method="POST">
+    {% csrf_token %}
+
+    Enter first number: <input type="text" name="num1" id="n1"><br><br>
+    Enter second number: <input type="text" name="num2" id="n2"><br><br>
+    <input type="button" value="+" onclick="calcSum()"><br/>
+    <input type="text" id="+"><br/>
+</form>
+
+
+{% endblock %}
