@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hello_world.apps.HelloWorldConfig',
     'calculator.apps.CalculatorConfig',
 ]
 
@@ -75,11 +74,23 @@ WSGI_APPLICATION = 'helloproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+#DATABASES = {
+ #   'default': {
+ #       'ENGINE': 'django.db.backends.sqlite3',
+ #       'NAME': BASE_DIR / 'db.sqlite3',
+ #   }
+#}
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+   'default': {
+   'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   'NAME': os.environ.get('DATABASENAME', ''),
+   'USER': os.environ.get('DATABASEUSER', ''),
+   'PASSWORD': os.environ.get('DATABASEPASSWORD', ''),
+   'HOST': os.environ.get('DATABASEHOST', ''),
+   'PORT': '5432',
+  }
 }
 
 
