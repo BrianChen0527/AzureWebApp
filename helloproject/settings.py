@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
-
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential, DeviceCodeCredential
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dg03^-=pr(3ygqv)xk@7b8^2251qwey=#&lql(u%n(web3_aum'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,10 +46,27 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
+    'applicationinsights.django.ApplicationInsightsMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+APPLICATION_INSIGHTS = {
+    # Your Application Insights instrumentation key
+    'ikey': os.environ.get('APPINSIGHTS_INSTRUMENTATIONKEY', "7a4b9bca-b5f5-4c7f-8a30-bfddf9fdeae7"),
+
+    # (optional) By default, request names are logged as the request method
+    # and relative path of the URL.  To log the fully-qualified view names
+    # instead, set this to True.  Defaults to False.
+    'use_view_name': True,
+
+    # (optional) To log arguments passed into the views as custom properties,
+    # set this to True.  Defaults to False.
+    'record_view_arguments': True,
+}
 
 ROOT_URLCONF = 'helloproject.urls'
 
@@ -68,6 +86,25 @@ TEMPLATES = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        # The application insights handler is here
+        'appinsights': {
+            'class': 'applicationinsights.django.LoggingHandler',
+            'level': 'WARNING'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['appinsights'],
+            'level': 'WARNING',
+            'propagate': True,
+        }
+    }
+}
+
 WSGI_APPLICATION = 'helloproject.wsgi.application'
 
 
@@ -81,6 +118,24 @@ WSGI_APPLICATION = 'helloproject.wsgi.application'
  #       'NAME': BASE_DIR / 'db.sqlite3',
  #   }
 #}
+"""
+default_credential = DeviceCodeCredential()
+account_url = "https://calcdbkeyvault.vault.azure.net/"
+client = SecretClient(account_url, credential=default_credential)
+secretName = "DATABASEUSER"
+#secretValue = input("Input a value for your secret > ")
+print(f"Retrieving your secret from {account_url}.")
+retrievedSecret = client.get_secret(secretName)
+
+
+KVUri = "https://calcdbkeyvault.vault.azure.net/"
+credential = DefaultAzureCredential(managed_identity_client_id="22406758-8a75-4118-9352-b7304b287b3d")
+client = SecretClient("https://calcdbkeyvault.vault.azure.net/", credential=credential)
+secretName = 'DATABASEPASSWORD'
+retrievedSecret = client.get_secret(secretName)
+print("-----------------------------------------")
+print(retrievedSecret)
+"""
 
 DATABASES = {
    'default': {
@@ -92,8 +147,17 @@ DATABASES = {
    'PORT': '5432',
   }
 }
-
-
+"""
+CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://OnlineCalculatorRC.redis.cache.windows.net:6380,password=NzRTX7qXYe1ACTsi3nDYR3Ymkg3MZ2tRfAzCaMAaSXA=,ssl=True,abortConnect=False",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            },
+        }
+    }
+"""
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
