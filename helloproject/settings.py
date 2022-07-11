@@ -126,8 +126,8 @@ secretName = "DATABASEUSER"
 #secretValue = input("Input a value for your secret > ")
 print(f"Retrieving your secret from {account_url}.")
 retrievedSecret = client.get_secret(secretName)
-
-
+print(retrievedSecret)
+"""
 KVUri = "https://calcdbkeyvault.vault.azure.net/"
 credential = DefaultAzureCredential(managed_identity_client_id="22406758-8a75-4118-9352-b7304b287b3d")
 client = SecretClient("https://calcdbkeyvault.vault.azure.net/", credential=credential)
@@ -135,7 +135,7 @@ secretName = 'DATABASEPASSWORD'
 retrievedSecret = client.get_secret(secretName)
 print("-----------------------------------------")
 print(retrievedSecret)
-"""
+
 
 DATABASES = {
    'default': {
