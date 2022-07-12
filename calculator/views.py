@@ -26,14 +26,16 @@ def calc(request):
     req_str = str(num1) + "+" + str(num2)
     print(req_str)
     if req_str in r:
-        res = r.get(req_str)
+        res = int(r.get(req_str))
         print("[+] retrieving from cache")
         db.insert_data("add", num1, num2, res)
+        print(res)
         return render(request, "input.html", {"result": res})
 
     res = int(num1) + int(num2)
     r.set(req_str, res)
     db.insert_data("add", int(num1), int(num2), res)
+    print(res)
     return render(request, "input.html", {"result": res})
 
 def hist_log(request):
