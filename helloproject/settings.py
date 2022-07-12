@@ -134,7 +134,7 @@ client = SecretClient("https://calcdbkeyvault.vault.azure.net/", credential=cred
 secretName = 'DATABASEPASSWORD'
 retrievedSecret = client.get_secret(secretName)
 print("-----------------------------------------")
-print(retrievedSecret)
+print(retrievedSecret.value)
 
 
 DATABASES = {
