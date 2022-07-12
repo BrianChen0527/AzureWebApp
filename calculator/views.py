@@ -4,7 +4,8 @@ from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from . import connectDB
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+import redis
+r = redis.StrictRedis(host="OnlineCalculatorRC.redis.cache.windows.net", port=6380, db=0, password="NzRTX7qXYe1ACTsi3nDYR3Ymkg3MZ2tRfAzCaMAaSXA=", ssl=True)
 
 # Update connection string information 
 db = connectDB.connection()
@@ -18,19 +19,20 @@ db.insert_data("add", 16, 16, 32)
 def index(request):
     return HttpResponse("Welcome to Brian's calculator")
 
+
 def calc(request):
     num1 = request.POST.get('num1', 0)
     num2 = request.POST.get('num2', 0)
     req_str = str(num1) + "+" + str(num2)
     print(req_str)
-    if req_str in cache:
-        res = cache.get(req_str)
+    if req_str in r:
+        res = r.get(req_str)
         print("[+] retrieving from cache")
         db.insert_data("add", num1, num2, res)
         return render(request, "input.html", {"result": res})
 
     res = int(num1) + int(num2)
-    cache.set(req_str, res, timeout=CACHE_TTL)
+    r.set(req_str, res)
     db.insert_data("add", int(num1), int(num2), res)
     return render(request, "input.html", {"result": res})
 
