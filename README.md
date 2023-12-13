@@ -1,0 +1,1 @@
+Implemented a compiler that compiles assembly code into machine code, a linker that combines multiple machine code files, and a pipelined processor with internal data forwarding. Finally, a simulator combines these programs to simulate a complete 32-bit RISC processor that outputs the states of the processor and main memory along the way. 
