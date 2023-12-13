@@ -1,1 +1,5 @@
-Implemented a compiler that compiles assembly code into machine code, a linker that combines multiple machine code files, and a pipelined processor with internal data forwarding. Finally, a simulator combines these programs to simulate a complete 32-bit RISC processor that outputs the states of the processor and main memory along the way. 
+Built a Python calculator web application using Django.
+Hosted it on Azure App service and stored API requests in Azure PostgreSQL flexible database. 
+Containerized and deployed said application with Docker and implemented CI/CD with Azure Pipelines.
+Set up Azure application insights to monitor my web application.
+Implemented security measures by storing database information and passwords as secrets on Azure Key Vault.
